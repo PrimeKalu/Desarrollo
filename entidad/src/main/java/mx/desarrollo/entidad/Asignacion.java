@@ -1,85 +1,124 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mx.desarrollo.entidad;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author usuario
+ */
 @Entity
 @Table(name = "asignacion")
-public class Asignacion {
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Asignacion.findAll", query = "SELECT a FROM Asignacion a")
+    , @NamedQuery(name = "Asignacion.findByIdAsignacion", query = "SELECT a FROM Asignacion a WHERE a.idAsignacion = :idAsignacion")
+    , @NamedQuery(name = "Asignacion.findByFechaAsignacion", query = "SELECT a FROM Asignacion a WHERE a.fechaAsignacion = :fechaAsignacion")})
+public class Asignacion implements Serializable {
 
-    private LongProperty idAsignacion;
-    private ObjectProperty<Profesor> profesor;
-    private ObjectProperty<UnidadAprendizaje> unidadAprendizaje;
-    private ObjectProperty<Date> fechaAsignacion;
-
-    public Asignacion() {
-        this.idAsignacion = new SimpleLongProperty();
-        this.profesor = new SimpleObjectProperty<>();
-        this.unidadAprendizaje = new SimpleObjectProperty<>();
-        this.fechaAsignacion = new SimpleObjectProperty<>();
-    }
-
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "idAsignacion")
-    public Long getIdAsignacion() {
-        return idAsignacion.get();
+    private Integer idAsignacion;
+    @Basic(optional = false)
+    @Column(name = "fechaAsignacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaAsignacion;
+    @JoinColumn(name = "idProfesor", referencedColumnName = "idProfesor")
+    @ManyToOne(optional = false)
+    private Profesor idProfesor;
+    @JoinColumn(name = "idUnidadAprendizaje", referencedColumnName = "idUnidadAprendizaje")
+    @ManyToOne(optional = false)
+    private UnidadAprendizaje idUnidadAprendizaje;
+
+    public Asignacion() {
     }
 
-    public void setIdAsignacion(Long idAsignacion) {
-        this.idAsignacion.set(idAsignacion);
+    public Asignacion(Integer idAsignacion) {
+        this.idAsignacion = idAsignacion;
     }
 
-    public LongProperty idAsignacionProperty() {
+    public Asignacion(Integer idAsignacion, Date fechaAsignacion) {
+        this.idAsignacion = idAsignacion;
+        this.fechaAsignacion = fechaAsignacion;
+    }
+
+    public Integer getIdAsignacion() {
         return idAsignacion;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProfesor", nullable = false)
-    public Profesor getProfesor() {
-        return profesor.get();
+    public void setIdAsignacion(Integer idAsignacion) {
+        this.idAsignacion = idAsignacion;
     }
 
-    public void setProfesor(Profesor profesor) {
-        this.profesor.set(profesor);
-    }
-
-    public ObjectProperty<Profesor> profesorProperty() {
-        return profesor;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idUnidadAprendizaje", nullable = false)
-    public UnidadAprendizaje getUnidadAprendizaje() {
-        return unidadAprendizaje.get();
-    }
-
-    public void setUnidadAprendizaje(UnidadAprendizaje unidadAprendizaje) {
-        this.unidadAprendizaje.set(unidadAprendizaje);
-    }
-
-    public ObjectProperty<UnidadAprendizaje> unidadAprendizajeProperty() {
-        return unidadAprendizaje;
-    }
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fechaAsignacion", nullable = false)
     public Date getFechaAsignacion() {
-        return fechaAsignacion.get();
+        return fechaAsignacion;
     }
 
     public void setFechaAsignacion(Date fechaAsignacion) {
-        this.fechaAsignacion.set(fechaAsignacion);
+        this.fechaAsignacion = fechaAsignacion;
     }
 
-    public ObjectProperty<Date> fechaAsignacionProperty() {
-        return fechaAsignacion;
+    public Profesor getIdProfesor() {
+        return idProfesor;
     }
+
+    public void setIdProfesor(Profesor idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
+    public UnidadAprendizaje getIdUnidadAprendizaje() {
+        return idUnidadAprendizaje;
+    }
+
+    public void setIdUnidadAprendizaje(UnidadAprendizaje idUnidadAprendizaje) {
+        this.idUnidadAprendizaje = idUnidadAprendizaje;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idAsignacion != null ? idAsignacion.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Asignacion)) {
+            return false;
+        }
+        Asignacion other = (Asignacion) object;
+        if ((this.idAsignacion == null && other.idAsignacion != null) || (this.idAsignacion != null && !this.idAsignacion.equals(other.idAsignacion))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "mx.desarrollo.entidad.Asignacion[ idAsignacion=" + idAsignacion + " ]";
+    }
+    
 }

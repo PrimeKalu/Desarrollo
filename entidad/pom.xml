@@ -6,7 +6,6 @@
         <artifactId>Desarrollo</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>mx.desarrollo</groupId>
     <artifactId>entidad</artifactId>
     <packaging>jar</packaging>
     <dependencies>

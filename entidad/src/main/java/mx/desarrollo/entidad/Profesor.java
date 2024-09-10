@@ -5,107 +5,133 @@
  */
 package mx.desarrollo.entidad;
 
-
 import java.io.Serializable;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.StringProperty;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import javax.persistence.*;
-import java.util.Set;
-
+/**
+ *
+ * @author usuario
+ */
 @Entity
 @Table(name = "profesor")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Profesor.findAll", query = "SELECT p FROM Profesor p")
+    , @NamedQuery(name = "Profesor.findByIdProfesor", query = "SELECT p FROM Profesor p WHERE p.idProfesor = :idProfesor")
+    , @NamedQuery(name = "Profesor.findByNombre", query = "SELECT p FROM Profesor p WHERE p.nombre = :nombre")
+    , @NamedQuery(name = "Profesor.findByApellido", query = "SELECT p FROM Profesor p WHERE p.apellido = :apellido")
+    , @NamedQuery(name = "Profesor.findByRfc", query = "SELECT p FROM Profesor p WHERE p.rfc = :rfc")})
 public class Profesor implements Serializable {
 
-    // Propiedades observables de JavaFX
-    private LongProperty idProfesor;
-    private StringProperty nombre;
-    private StringProperty apellido;
-    private StringProperty rfc;
-
-    // Relación con asignaciones (Lazy para evitar cargar todo al instante)
-    @OneToMany(mappedBy = "profesor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Asignacion> asignaciones;
-
-    // Constructor vacío
-    public Profesor() {
-        this.idProfesor = new SimpleLongProperty();
-        this.nombre = new SimpleStringProperty();
-        this.apellido = new SimpleStringProperty();
-        this.rfc = new SimpleStringProperty();
-    }
-
-    // Constructor parametrizado
-    public Profesor(String nombre, String apellido, String rfc) {
-        this();
-        this.nombre.set(nombre);
-        this.apellido.set(apellido);
-        this.rfc.set(rfc);
-    }
-
-    // Getters y Setters con propiedades observables de JavaFX
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "idProfesor")
-    public Long getIdProfesor() {
-        return idProfesor.get();
+    private Integer idProfesor;
+    @Basic(optional = false)
+    @Column(name = "nombre")
+    private String nombre;
+    @Basic(optional = false)
+    @Column(name = "apellido")
+    private String apellido;
+    @Basic(optional = false)
+    @Column(name = "rfc")
+    private String rfc;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProfesor")
+    private List<Asignacion> asignacionList;
+
+    public Profesor() {
     }
 
-    public void setIdProfesor(Long idProfesor) {
-        this.idProfesor.set(idProfesor);
+    public Profesor(Integer idProfesor) {
+        this.idProfesor = idProfesor;
     }
 
-    public LongProperty idProfesorProperty() {
+    public Profesor(Integer idProfesor, String nombre, String apellido, String rfc) {
+        this.idProfesor = idProfesor;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rfc = rfc;
+    }
+
+    public Integer getIdProfesor() {
         return idProfesor;
     }
 
-    @Column(name = "nombre", nullable = false)
+    public void setIdProfesor(Integer idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
     public String getNombre() {
-        return nombre.get();
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre.set(nombre);
-    }
-
-    public StringProperty nombreProperty() {
         return nombre;
     }
 
-    @Column(name = "apellido", nullable = false)
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getApellido() {
-        return apellido.get();
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido.set(apellido);
-    }
-
-    public StringProperty apellidoProperty() {
         return apellido;
     }
 
-    @Column(name = "rfc", unique = true, nullable = false, length = 13)
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public String getRfc() {
-        return rfc.get();
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc.set(rfc);
-    }
-
-    public StringProperty rfcProperty() {
         return rfc;
     }
 
-    public Set<Asignacion> getAsignaciones() {
-        return asignaciones;
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
     }
 
-    public void setAsignaciones(Set<Asignacion> asignaciones) {
-        this.asignaciones = asignaciones;
+    @XmlTransient
+    public List<Asignacion> getAsignacionList() {
+        return asignacionList;
     }
+
+    public void setAsignacionList(List<Asignacion> asignacionList) {
+        this.asignacionList = asignacionList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idProfesor != null ? idProfesor.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Profesor)) {
+            return false;
+        }
+        Profesor other = (Profesor) object;
+        if ((this.idProfesor == null && other.idProfesor != null) || (this.idProfesor != null && !this.idProfesor.equals(other.idProfesor))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "mx.desarrollo.entidad.Profesor[ idProfesor=" + idProfesor + " ]";
+    }
+    
 }
-
