@@ -5,13 +5,10 @@
  */
 package mx.desarrollo.DAO;
 
-import mx.desarrollo.entidad.Usuario;
-import mx.desarrollo.persistencia.AbstractDAO;
-
 /**
  *
- * @author total
+ * @author gusba
  */
-public class UsuarioDAO extends AbstractDAO<Integer, Usuario>{
+public class AsignacionDAO {
     
 }

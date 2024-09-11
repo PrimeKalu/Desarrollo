@@ -5,14 +5,10 @@
  */
 package mx.desarrollo.DAO;
 
-import mx.desarrollo.entidad.Alumno;
-import mx.desarrollo.persistencia.AbstractDAO;
-// cambio GD//
 /**
  *
- * @author total
+ * @author gusba
  */
-public class AlumnoDAO extends AbstractDAO<Integer, Alumno>{
-    
+public class UnidadAprendizajeDAO {
     
 }
